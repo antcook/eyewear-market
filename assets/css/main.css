@@ -1,0 +1,218 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700');
+@import url('https://fonts.googleapis.com/css?family=Merriweather:400,700');
+
+body {
+    font: 100%/1.4 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #333;
+}
+
+h1, h2, h3 {
+    font-family: 'Merriweather', serif;
+}
+
+#header {
+  background: #13171d;
+  height: 80px;
+}
+
+#header .inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.inner:before,
+.inner:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.inner:after {
+    clear: both;
+}
+
+
+#header .logo {
+   float: left;
+   height: 80px;
+}
+
+#header .logo img {
+  margin-top: 25px;
+  width: 220px;
+}
+
+.inner {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  margin: 0;
+}
+
+.select .box {
+  font-size: 14px;
+  font-weight: bold;
+  width: 300px;
+  height: 50px;
+  line-height: 50px;
+  margin-bottom: 20px;
+  color: #545454;
+  padding: 0 15px;
+  background: #f2f2f2;
+}
+
+.select ul, .select li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  user-select: none;
+}
+
+.select .options {
+  position: absolute;
+  color: #545454;
+  font-size: 14px;
+}
+
+.select span, .select li, input, textarea {
+  display: block;
+  height: 55px;
+  width: 300px;
+  padding: 0 15px;
+  line-height: 56px;
+  background: #f2f2f2;
+  font-weight: 600;
+}
+ 
+.select .box {
+  background: url(http://svgur.com/i/MZ.svg) no-repeat #f2f2f2;
+  background-size: 15px;
+  background-position:  right 15px center;
+  margin: 0;
+}
+
+.select li:hover {
+  background: #dadada;
+}
+
+.button {
+  background: #13171d;
+  display: block;
+  height: 55px;
+  width: 300px;
+  color: #fff;
+  border-radius: 2px;
+  text-align: center;
+  padding: 0 15px;
+  line-height: 55px;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid #13171d;
+  margin-bottom: 20px;
+  outline: none;
+}
+
+.button:hover, .alt {
+  background: #fff;
+  color: #13171d;
+}
+
+.button:selected {
+  background: red;
+}
+
+.alt:hover {
+  background: #13171d;
+  color: #fff;
+}
+
+input, textarea {
+  border: none;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 12px;
+  outline: none;
+  color: #545454;
+}
+
+input:focus, textarea:focus {
+  background: #dadada;
+}
+
+textarea {
+  font-family: 'Open Sans', sans-serif;
+  min-height: 130px;
+  resize: none;
+}
+
+label {
+  font-size: 12px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  color: #666;
+   text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.box {
+  width: 35px;
+  height: 35px;
+  border: none;
+  background: #f2f2f2;
+  border: none;
+  border-radius: 2px;
+  display: block;
+  margin-right: 6px;
+}
+
+.checkbox label {
+  display: block;
+  text-transform: normal;
+  margin: 0;
+  padding: 0;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.checked {
+  background: url(http://svgur.com/i/Mh.svg) center no-repeat #f2f2f2;
+  background-size: 12px;
+}
+
+.page-enter-active, .page-leave-active {
+  transition: opacity .2s
+}
+.page-enter, .page-leave-active {
+  opacity: 0
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
+}

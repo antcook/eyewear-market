@@ -1,2 +1,2 @@
 # eyewear-market
-A bespoke shopping experince for eyewearmarket.co.uk
+A bespoke shopping experience for eyewearmarket.co.uk
