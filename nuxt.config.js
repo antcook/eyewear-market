@@ -3,11 +3,14 @@ module.exports = {
     routes: [
       {name: 'product', path: '/product/:name', component: 'pages/_product'},
       {name: 'gender',  path: '/gender/:gender/:type',  component: 'pages/_gender'},
-      {path: 'cart',  component: 'pages/cart'}
+      {path: 'cart',  component: 'pages/cart'},
+      {path: 'checkout',  component: 'pages/checkout'}
     ]
   },
   build: {
-    vendor: ['axios']
+    vendor: [
+      'axios'
+    ]
   },
   loading: {
     color: '#e74c3c',

@@ -4,14 +4,12 @@
     
     <div class="main">
       
-      <img v-bind:src=" product.images[imageIndex].url[imageAngle]" alt="">
+      <img v-bind:src="product.images[image.index].url[image.position]">
       
-      <div class="images">
-        <div class="image" v-for="(types, key) in product.images[imageIndex].url">
-          <img v-bind:src="types" alt="" @click="updateImg(key, types)">
-          </div>
-        </div>
-    
+      <div class="images" v-for="(types, key) in product.images[image.index].url">
+        <img v-bind:src="types" @click="image.position = key">
+      </div>
+
     </div>
     
     <div class="about">
@@ -21,12 +19,12 @@
       <div class="select">
         
         <label for="">Select Style</label>
-        <div class="box" @click="toggleStyle()">{{style}}</div>
+        <div class="box" @click="toggle = !toggle">{{style}}</div>
         
         <ul class="options" v-if="toggle">
           <li v-for="(types, key) in product.images" @click="updateStyle(types.colour, key)">
             {{types.colour}}
-            </li>
+          </li>
         </ul>
       
       </div>
@@ -34,101 +32,177 @@
       <p>{{product.description}}</p>
       <h4 class="price">&pound;{{product.price}}.00</h4>
       
-      <button class="button" @click="addToCart(product.slug)">Buy Frame Only</button>
-      <button class="button alt" @click="addedWithRX = true">Buy With Prescription</button>
+      <div class="buttons">
+        <button class="button" @click="addToCart(product.slug)">Buy Frame Only</button>
+        <button class="button alt" @click="next = !next">Buy With Prescription Lenses</button>
+      </div>
     
     </div>
 
-    <transition name="fade">
-      <div class="confirm" v-if="added">
+    <div class="prompt" v-if="added">
       
-        <div class="model">
-          <h1 class="title">{{product.brand}} {{product.name}} Added</h1>
-          <button class="button" @click="added = false">Continue Shopping</button>
-          <router-link to="/cart"><button class="button alt">Proceed To Checkout</button></router-link>
-        </div>
+      <div class="confirm">
+        
+        <h1 class="title">{{product.brand}} {{product.name}} Added</h1>
+        
+        <button class="button" @click="added = !added">Continue Shopping</button>
+        <router-link to="/cart"><button class="button alt">Proceed To Checkout</button></router-link>
       
       </div>
-    </transition>
 
-    <transition name="fade">
-      <div class="confirm" v-if="addedWithRX">
+    </div>
+
+    <div class="prompt" v-if="next">
       
-        <div class="model">
-    
+      <div class="confirm lenses" v-if="!item.lenses">
 
-          <div id="lens-type" v-show="!lenseType">
-            <h2 class="title">Choose Your Lens Type</h2>
-
-            <div class="lens-box distance">
-              <h3 @click="lenseType = 'Distance'">Distance</h3>
-            </div>
-
-            <div class="lens-box reading">
-              <h3 @click="lenseType = 'Reading'">Reading</h3>
-            </div>
-
-            <div class="lens-box office">
-              <h3 @click="lenseType = 'Office'">Office</h3>
-            </div>
+          <h2>Choose Your Lens Type</h2>
+          
+          <div class="lens-box distance">
+            <h3>Distance</h3>
+            <p>A lens designed to correct your far-vision distance, these lenses correct long and short-sightedness and a perfect for every day use.</p>
+          
+            <button class="button" @click="item.lenses = 'Distance'">Select</button>
+          
           </div>
 
-        <div id="pack" v-show="lenseType && !pack">
-            <h2 class="title">Choose A Package</h2>
-
-            <div class="lens-box bronze">
-              <h3 @click="pack = 'Bronze'">Bronze</h3>
-            </div>
-
-            <div class="lens-box silver">
-              <h3 @click="pack = 'Silver'">Silver</h3>
-            </div>
-
-            <div class="lens-box gold">
-              <h3 @click="pack = 'Gold'">Gold</h3>
-            </div>
+          <div class="lens-box office">
+            <h3>Intermediate</h3>
+            <p>These lenses work to improve your vision at approximately arm's length, these lenses are perfect for computing and other mid-range tasks.</p>
+          
+            <button class="button" @click="item.lenses = 'Intermediate'">Select</button>
+          
           </div>
 
-        <div id="extras" v-show="lenseType && pack && !extras">
-            <h2 class="title">Lens Extras</h2>
+          <div class="lens-box reading">
+            <h3>Near</h3>
+            <p>Perfect for enhancing your reading and close up vision, ideal for anyone who has a reading prescription and is struggling with close up tasks.</p>
+          
+            <button class="button" @click="item.lenses = 'Near'">Select</button>
+          
+          </div>
+      
+      </div>
 
-            <div class="lens-box bronze">
-              <h3 @click="extras = 'Brown'">Brown Tint</h3>
-            </div>
-
-            <div class="lens-box silver">
-              <h3 @click="extras = 'Grey'">Grey Tint</h3>
-            </div>
-
-            <div class="lens-box gold">
-              <h3 @click="extras = 'Reactions'">Reactions</h3>
-            </div>
-        </div>
-
-        <div id="final" v-show="lenseType && pack && extras && !next">
-
-          <h1>Confirm</h1>
-          <img v-bind:src=" product.images[imageIndex].url[imageAngle]" alt="" class="confirm-img">
-          <h3>{{product.brand}} {{product.name}}</h3>
-          <h4>with a {{lenseType}} lens on the {{pack}} package with a {{extras}} sunglass tint.</h4>
-          <button class="button" @click="addToCartWithRx(product.slug)">Add To Basket</button>
-          <router-link to="/cart"><button class="button alt">Cancel</button></router-link>
-        </div>
-
-        <div id="next" v-show="next">
-          <h1>Added To Your Basket</h1>
-          <button class="button" @click="added = false">Continue Shopping</button>
-          <router-link to="/cart"><button class="button alt">Proceed To Checkout</button></router-link>
-        </div>
-
+      <div class="confirm package" v-if="item.lenses && !item.pack && !item.extras">
+        
+        <h2>Choose A Package</h2>
+        
+        <div class="pack-box bronze">
+          <h3 @click="pack = 'Bronze'">Bronze</h3>
+          <ul>
+            <li>Standard Lenses</li>
+            <li>Anti-glare coating</li>
+            <li></li>
+            <li></li>
+          </ul>
+          <h2>£10.00</h2>
+          <button class="button" @click="item.pack = 'Bronze'">Select</button>
         </div>
         
+        <div class="pack-box silver">
+          <h3 @click="pack = 'Silver'">Silver</h3>
+          <ul>
+            <li>Thin Lenses (1.6)</li>
+            <li>Anti-glare coating</li>
+            <li>Anti-scratch coating</li>
+            <li>UV Protection</li>
+          </ul>
+          <h2>£15.00</h2>
+          <button class="button" @click="item.pack = 'Silver'">Select</button>
+        </div>
+        
+        <div class="pack-box gold">
+          <h3 @click="pack = 'Gold'">Gold</h3>
+          <ul>
+            <li>Extra Thin Lenses</li>
+            <li>Anti-glare coating</li>
+            <li>Anti-scratch coating</li>
+            <li>UV Protection</li>
+          </ul>
+          <h2>£25.00</h2>
+          <button class="button" @click="item.pack = 'Gold'">Select</button>
+        </div>
 
+        <div class="pack-box platinum">
+          <h3 @click="pack = 'Platinum'">Platinum</h3>
+          <ul>
+            <li>super Thin Lenses</li>
+            <li>Anti-glare coating</li>
+            <li>Anti-scratch coating</li>
+            <li>UV Protection</li>
+          </ul>
+          <h2>£45.00</h2>
+          <button class="button" @click="item.pack = 'Platinum'">Select</button>
         </div>
       
+
       </div>
-    </transition>
-  
+
+      <div class="confirm extras" v-if="item.lenses && item.pack && !item.extras">
+        
+        <h2>Lens Tints</h2>
+
+        <div class="tints">
+        <div class="sunglass-tint">
+          <h3>Full Sunglass Tints</h3>
+          <p>Provided 100% UV Protection.</p>
+          <ul>
+            <li class="brown"@click="addToCartWithRx(product.slug, 'Brown Sunglass')"><span></span>Brown</li>
+            <li class="grey" @click="addToCartWithRx(product.slug, 'Grey Sunglass')"><span></span>Grey</li>
+            <li class="green" @click="addToCartWithRx(product.slug, 'Green Sunglass')"><span></span>Green</li>
+          </ul>
+          <h2>£10.00</h2>
+        </div>
+
+        <div class="polarised-tint">
+          <h3>Polarised Tints</h3>
+          <p>Provided 100% UV Protection and blocks 99.7% of glare from reflected light.</p>
+          <ul>
+            <li class="brown" @click="addToCartWithRx(product.slug, 'Brown Poloarised')"><span></span>Brown</li>
+            <li class="grey" @click="addToCartWithRx(product.slug, 'Grey Poloarised')"><span></span>Grey</li>
+          </ul>
+          <h2>£40.00</h2>
+        </div>
+
+        <div class="transition-tint">
+          <h3>Transition Tints</h3>
+          <p>Lenses that adapt and go from clear to dark in sun/UV light conditions.</p>
+          <ul>
+            <li class="brown" @click="addToCartWithRx(product.slug, 'Brown Transition')"><span></span>Brown</li>
+            <li class="grey" @click="addToCartWithRx(product.slug, 'Grey Transition')"><span></span>Grey</li>
+          </ul>
+          <h2>£60.00</h2>
+        </div>
+
+      
+
+        </div>
+
+        <div class="no-tints">
+          <h3>Don't want a tint?</h3>
+          <button class="button" @click="addToCartWithRx(product.slug, 'No Tint')">Continue With No Tints</button>
+        </div>
+      </div>
+
+   
+      <div class="confirm" v-if="item.lenses && item.pack && item.extras">
+
+        <img v-bind:src="product.images[image.index].url[0]">
+        
+        <h1 class="title">{{product.brand}} {{product.name}} Added</h1>
+        
+        <button class="button" @click="next = !next">Continue Shopping</button>
+        <router-link to="/cart"><button class="button alt">Proceed To Checkout</button></router-link>
+      
+      </div>
+
+    </div>
+
+    
+
+    </div>
+
   </div>
 
 </template>
@@ -145,16 +219,18 @@ export default {
         return {
           product: res.data[0],
           style: res.data[0].images[0].colour,
-          images: [],
-          imageIndex: 0,
-          imageAngle: 0,
-          toggle: false,
-          added: false,
-          lenseType: false,
-          addedWithRX: false,
-          pack: false,
-          extras: false,
-          next: false
+          image: {index: 0, position: 0},
+          item: {
+            slug: '',
+            style: '',
+            image: '',
+            lenses: false,
+            pack:   false,
+            extras: false
+          },
+          added:  false,
+          next:   false,
+          toggle: false
         }
       })
       .catch(() => {
@@ -162,21 +238,10 @@ export default {
       })
     },
     methods: {
-      updateImg(key, url) {
-        this.imageAngle = key;
-      },
-      toggleStyle() {
-        if(this.toggle) {
-          this.toggle = false;
-        }
-        else {
-          this.toggle = true;
-        }
-      },
       updateStyle(style, key) {
-        this.style  = style
-        this.toggle = false
-        this.imageIndex = key
+        this.style       = style
+        this.image.index = key
+        this.toggle      = false
       },
       addToCart(slug) {
         this.$store.dispatch('addToCart', {
@@ -185,31 +250,35 @@ export default {
           lenses:  false,
           pack: false,
           extras:  false,
-          imageIndex: this.imageIndex
+          imageIndex: this.image.index
         })
         .catch((error) => {
           console.log(error.message)
         })
         this.added = true;
       },
-      addToCartWithRx(slug) {
+      addToCartWithRx(slug, extras) {
+
+        this.item.extras = extras
+
         this.$store.dispatch('addToCart', {
           product: slug,
           style:   this.style,
-          lenses:  this.lenseType,
-          pack: this.pack,
-          extras:  this.extras,
-          imageIndex: this.imageIndex
+          lenses:  this.item.lenses,
+          pack:    this.item.pack,
+          extras:  this.item.extras,
+          imageIndex: this.image.index
         })
         .catch((error) => {
           console.log(error.message)
         })
         this.next = true;
-      },
+      }
     }
 }
 
 </script>
+
 <style>
 
 #product {
@@ -243,10 +312,16 @@ export default {
   color: #e74c3c;
 }
 
-.image img {
+.images {
+  margin: 0 auto;
+  width: 440px;
+}
+
+.images img {
   width: 200px;
   border: solid 5px #ddd;
   height:100px;
+  float: left;
   margin: 0 10px;
 }
 
@@ -255,15 +330,7 @@ export default {
   margin: 10px 0;
 }
 
-.images {
-  max-width: 1140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-.confirm {
+.prompt {
   background: rgba(0, 0, 0, .8);
   top: 0;
   left: 0;
@@ -275,17 +342,67 @@ export default {
   justify-content: center;
 }
 
-.model {
-  width: auto;
+.prompt .button {
+  width: 100%;
+}
+
+.confirm {
+  max-width: 980px;
   background: #fff;
-  padding: 40px;
+  padding: 40px 20px;
 }
 
 .lens-box {
   width: 250px;
   float: left;
-  background: #eee;
+  border: solid 3px #333;
   margin: 20px;
+  padding: 15px;
+}
+
+.lens-box p {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.lens-box ul {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0 0 0 20px;
+  text-align: left;
+}
+
+
+.lens-box li {
+  padding: 5px 0;
+}
+
+.pack-box {
+  width: 200px;
+  float: left;
+  border: solid 3px #333;
+  margin: 10px;
+  padding: 15px;
+}
+
+.pack-box p {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.pack-box ul {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0 0 0 20px;
+  text-align: left;
+}
+
+.pack-box li {
+  padding: 5px 0;
 }
 
 #final h1 {
@@ -296,13 +413,80 @@ export default {
 }
 
 
-.lens-box:hover {
-  background: #ccc;
-}
-
 .confirm-img {
   width: 400px;
   margin: 0 auto;
+}
+
+.sunglass-tint, .polarised-tint, .transition-tint {
+  width: 250px;
+  float: left;
+  border: solid 3px #333;
+  margin: 20px;
+  padding: 15px;
+}
+
+.sunglass-tint p, .polarised-tint p, .transition-tint p {
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 600;
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.sunglass-tint ul, .polarised-tint ul, .transition-tint ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.brown span, .grey span, .green span  {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+  margin: 10px;
+  border-radius: 50%;
+}
+
+.brown span {
+  background: #5C392F;
+}
+
+.grey span {
+  background: #444;
+}
+
+.green span {
+  background: #3C5C2F;
+}
+
+.no-tints {
+    border: solid 3px #333;
+    width: 830px;
+    margin: 0 20px;
+    padding: 0 0 15px 0;
+}
+
+.no-tints .button {
+  width: 350px;
+}
+
+.tints:before,
+.tints:after {
+    content: " ";
+    display: table;
+}
+
+.tints:after {
+    clear: both;
+}
+
+.tints li:hover {
+  background: #eee;
 }
 
 </style>

@@ -7,6 +7,7 @@ html {
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700');
 @import url('https://fonts.googleapis.com/css?family=Merriweather:400,700');
+@import url('icons.css');
 
 body {
     font: 100%/1.4 'Open Sans', sans-serif;
@@ -211,8 +212,23 @@ label {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .3s
+  transition: opacity .2s
 }
 .fade-enter, .fade-leave-active {
   opacity: 0
+}
+
+
+@media (max-width: 600px) {
+
+  #header .inner {
+    width: 100%;
+  }
+
+  #header .logo {
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+
 }

@@ -1,7 +1,13 @@
 <template>
   <div class="inner">
 
-    <h1 class="top">Your Basket</h1>
+    <div v-if="cart.length > 0">
+      <h1 class="top">Your Basket</h1>
+    </div>
+    <div v-else>
+      <h1 class="top">Your Basket Is Empty</h1>
+      <router-link to="/"><button class="button">Click here to go shopping!</button></router-link>
+    </div>
 
     <ul class="cart">
       <li v-for="(item, key) in cart" class="item">
@@ -11,20 +17,28 @@
         </div>
 
         <div class="details">
-          <h2>{{item.product[0].brand}} {{item.product[0].name}}</h2>
+          <h1>{{item.product[0].brand}} {{item.product[0].name}}</h1>
           <ul class="details-list">
             <li><span class="key">Style:</span> {{item.style}}</li>
+          </ul>
+          <h3>Details:</h3>
+          <ul class="details-list">
             <li><span class="key">Lenses:</span> <span v-if="item.lenses">{{item.lenses}}</span><span v-else>Frame Only</span></li>
-            <li><span class="key">Package:</span> <span v-if="item.lenses">{{item.pack}}</span><span v-else>No Package</span></li>
-            <li><span class="key">Extras:</span> <span v-if="item.lenses">{{item.extras}} sunglass tint</span><span v-else>No Extras</span></li>
+            <li><span class="key">Package (£{{item.packPrice}}):</span> <span v-if="item.lenses">{{item.pack}}</span><span v-else>No Package</span></li>
+            <li><span class="key">Extras (£{{item.extrasPrice}}):</span> <span v-if="item.lenses">{{item.extras}} tint</span><span v-else>No Extras</span></li>
             </ul>
+
+            <h2>£{{item.total}}</h2>
+
             <span class="remove" @click="remove(key)">X Remove</span>
           </div>
 
       </li>
     </ul>
 
-    <button class="button bottom">Continue To Checkout</button>
+    <div v-if="cart.length > 0">
+      <router-link to="checkout"><button class="button bottom">Continue To Checkout</button></router-link>
+    </div>
 
   </div>
 </template>

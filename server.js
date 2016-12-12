@@ -78,14 +78,46 @@ app.post('/api/cart', function (req, res) {
   Product.find({slug: req.body.product}, function(error, product) {
       if (error) throw err;
 
-      var item = {
+      var packPrice   = 0;
+      var extrasPrice = 0;
+
+      if(req.body.pack && req.body.pack == 'Bronze') {
+          var packPrice = 10;
+      }
+      if(req.body.pack && req.body.pack == 'Silver') {
+          var packPrice = 15;
+      }
+      if(req.body.pack && req.body.pack == 'Gold') {
+          var packPrice = 25;
+      }
+      if(req.body.pack && req.body.pack == 'Platinum') {
+          var packPrice = 45;
+      }
+
+      if(req.body.extras && req.body.extras.includes('Poloarised')) {
+          var extrasPrice = 40;
+      }
+      if(req.body.extras && req.body.extras.includes('Sunglass')) {
+          var extrasPrice = 10;
+      }
+      if(req.body.extras && req.body.extras.includes('Transition')) {
+          var extrasPrice = 60;
+      }
+
+     var total = product[0].price + packPrice + extrasPrice;
+
+     var item = {
           product: product,
           style:   req.body.style,
           lenses:  req.body.lenses,
           pack: req.body.pack,
           extras: req.body.extras,
-          imageIndex: req.body.imageIndex
+          imageIndex: req.body.imageIndex,
+          packPrice: packPrice,
+          extrasPrice: extrasPrice,
+          total: total
       }
+
 
       req.session.cart.push(item)
       return res.json(req.session.cart);
@@ -99,6 +131,19 @@ app.post('/api/cart/remove', function (req, res) {
     req.session.cart.splice(req.body.id, 1);
     
     return res.json(req.session.cart);
+
+})
+
+app.post('/api/createorder', function (req, res) {
+
+    var order = {
+        customer: req.body.customer,
+        address:  req.body.address,
+        payment:  req.body.payment,
+        order:    req.body.order
+    }
+    
+    return res.json(order);
 
 })
 

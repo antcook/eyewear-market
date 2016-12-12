@@ -3,8 +3,10 @@
   <div class="inner">
 
     <appSlider></appSlider>
+
+    <h1 class="latest-heading">Latest Products</h1>
     
-    <ul class="latest">
+    <ul id="latest">
       
       <li v-for="product in products">
 
@@ -50,7 +52,7 @@ export default {
 
 <style>
 
-.latest {
+#latest {
   margin: 0 auto;
   padding: 0;
   list-style: none;
@@ -59,27 +61,51 @@ export default {
   text-align: center;
 }
 
-.latest li {
+#latest li {
   margin: 0;
   padding: 0;
   width: 33.33%;
 }
 
-.latest img {
+#latest img {
   width: 100%;
 }
 
-.latest .name {
+#latest .name {
   font-size: 20px;
   line-height: 1;
   margin: 0;
 }
 
-.latest .price {
+#latest .price {
   margin: 15px 0;
   font-weight: bold;
   line-height: 1;
   color: #e74c3c;
+}
+
+@media (max-width: 600px) {
+
+  #latest {
+    width: 100%;
+    display: block;
+  }
+
+  #latest li {
+    width: 100%;
+    padding: 5px 0;
+  }
+
+  #latest img {
+    max-width: 230px;
+  }
+
+  .latest-heading {
+    font-size: 28px;
+    text-align: center !important;
+    margin: 40px 0 0 0;
+  }
+
 }
 
 </style>
